@@ -1,27 +1,13 @@
 import React, { Component } from "react";
-import {
-    Navbar,
-    NavbarBrand,
-    Nav,
-    Container,
-    Row,
-    Col,
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Alert,
-} from "reactstrap";
-import Loader from "./Loader";
-import AnimateBalance from "./AnimateBalance";
-import sha256 from "./sha256";
-import logo from "./cyber-quest-white.png";
-import "./App.css";
+import { Container, Row } from "reactstrap";
+import UsernameModal from "./components/UsernameModal";
+import StatusBarHeader from "./components/StatusBarHeader";
+import ChainPanel from "./components/ChainPanel";
+import CommandPanel from "./components/CommandPanel";
+import VerificationFooter from "./components/VerificationFooter";
+import "./inc/App.css";
 
-const api = "https://api.blockchain.bengalloway.io";
-const mineDelay = 1; //seconds
-const usernameRegexp = /^[\w]+$/;
+import { api, mineDelay, usernameRegexp } from "./config";
 
 class App extends Component {
     constructor(props) {
@@ -46,10 +32,6 @@ class App extends Component {
             sendError: false,
             sendAmount: "",
             sendRecipient: "",
-            verifyPreviousProof: "",
-            verifyProof: "",
-            verifyPreviousHash: "",
-            verifyProofHash: "",
             sendRequestInFlight: false,
             mineRequestInFlight: false,
             transactionRequestInFlight: false,
@@ -57,7 +39,6 @@ class App extends Component {
             userRequestInFlight: false,
         };
     }
-    promiseState = async (state) => new Promise((resolve) => this.setState(state, resolve));
 
     recalculateBalance() {
         const chain = this.state.chain.chain;
@@ -115,18 +96,6 @@ class App extends Component {
     };
     handleRecipientChange = (e) => {
         this.setState({ sendRecipient: e.target.value });
-    };
-    handleVerifyChange = () => {
-        Promise.all([
-            this.promiseState({ verifyPreviousProof: document.getElementById("verifyPreviousProof").value }),
-            this.promiseState({ verifyProof: document.getElementById("verifyProof").value }),
-            this.promiseState({ verifyPreviousHash: document.getElementById("verifyPreviousHash").value }),
-        ]).then(() => {
-            const verifyProofHash = sha256(
-                this.state.verifyPreviousProof + this.state.verifyProof + this.state.verifyPreviousHash
-            );
-            this.setState({ verifyProofHash });
-        });
     };
 
     fetchChain() {
@@ -207,234 +176,50 @@ class App extends Component {
     render() {
         return (
             <div className="App-root d-flex flex-column justify-content-between">
-                <Modal isOpen={this.state.user === null} autoFocus={true} keyboard={false} backdrop="static">
-                    <ModalHeader className="heading">Welcome to CyberCoin</ModalHeader>
-                    <ModalBody>
-                        <label htmlFor="userEntry">Enter a username:&nbsp;</label>
-                        <input type="text" id="userEntry" className="mono-font" />
-                        <Alert
-                            className="mb-0"
-                            color="danger"
-                            isOpen={this.state.usernameError}
-                            toggle={() => this.setState({ usernameError: false, usernameErrorMessage: "" })}
-                        >
-                            {this.state.usernameErrorMessage}
-                        </Alert>
-                    </ModalBody>
-                    <ModalFooter>
-                        {this.state.userRequestInFlight ? (
-                            <Loader />
-                        ) : (
-                            <Button color="success" onClick={this.setUser}>
-                                Save and Start
-                            </Button>
-                        )}
-                    </ModalFooter>
-                </Modal>
-                <Navbar className="header" color="dark" expand="md">
-                    <NavbarBrand className="heading text-white" href="/">
-                        <img src={logo} className="App-logo" alt="logo" />
-                        &nbsp;CyberCoin
-                    </NavbarBrand>
-                    <Nav className="ml-auto pr-3 text-white d-flex align-items-center" navbar>
-                        <span className="heading">Coins:</span> <AnimateBalance value={this.state.balance} />
-                    </Nav>
-                    <Nav className="ml-auto pr-3 text-white" navbar>
-                        <span className="heading">User:</span> {this.state.user}
-                    </Nav>
-                </Navbar>
-                <div className="main-content flex-grow-1 flex-shrink-0">
-                    <Container fluid>
-                        <Row>
-                            <Col id="chain-display" sm="7" className="column-height py-3">
-                                <Container fluid>
-                                    <Row>
-                                        <Col sm="12" className="px-1 column-chrome">
-                                            <h3 className="heading">Chain</h3>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col
-                                            id="chain-pre"
-                                            sm="12"
-                                            className="panel-height column-overflow border px-0"
-                                        >
-                                            <pre className="my-0">
-                                                {JSON.stringify(this.state.chain.chain, null, 2)}
-                                            </pre>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col sm="12" className="py-3 px-0 column-chrome">
-                                            {this.state.chainRequestInFlight ? (
-                                                <Loader />
-                                            ) : (
-                                                <Button color="success" onClick={this.fetchChain}>
-                                                    Update the chain
-                                                </Button>
-                                            )}
-                                        </Col>
-                                    </Row>
-                                </Container>
-                            </Col>
-
-                            <Col sm="5" className="column-height column-overflow p-3">
-                                <h3 className="heading">Commands</h3>
-                                <h4>Mine a Block</h4>
-                                {this.state.mineRequestInFlight ? (
-                                    <Container>
-                                        <Row>
-                                            <Col sm="4">
-                                                <Loader mine={true} />
-                                            </Col>
-                                            <Col sm="8" className="d-flex flex-column justify-content-center">
-                                                <Alert className="mt-2" color="success">
-                                                    Mining in progress...
-                                                </Alert>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                ) : (
-                                    <Button color="success" onClick={this.mine}>
-                                        Mine!
-                                    </Button>
-                                )}
-                                {this.state.mineStatus ? (
-                                    <Alert
-                                        className="mt-2 mb-0 p-0"
-                                        color="success"
-                                        toggle={() => this.setState({ mineStatus: null })}
-                                    >
-                                        <h4 className="alert-heading pt-2 pl-2">{this.state.mineStatus.message}</h4>
-                                        <pre className="m-0">
-                                            {JSON.stringify(
-                                                {
-                                                    index: this.state.mineStatus.index,
-                                                    previous_proof: this.state.mineStatus.previous_proof,
-                                                    proof: this.state.mineStatus.proof,
-                                                    previous_hash: this.state.mineStatus.previous_hash,
-                                                    transactions_in_block: this.state.mineStatus.transactions.length,
-                                                },
-                                                null,
-                                                2
-                                            )}
-                                        </pre>
-                                    </Alert>
-                                ) : null}
-                                <hr />
-                                <h4>Send Some Coins</h4>
-                                <p>
-                                    Send{" "}
-                                    <input
-                                        type="text"
-                                        id="amount"
-                                        className="mono-font"
-                                        value={this.state.sendAmount}
-                                        placeholder="some"
-                                        onChange={this.handleAmountChange}
-                                        size={10}
-                                    />{" "}
-                                    coins to{" "}
-                                    <input
-                                        type="text"
-                                        id="recipient"
-                                        className="mono-font"
-                                        value={this.state.sendRecipient}
-                                        placeholder="someone"
-                                        onChange={this.handleRecipientChange}
-                                    />{" "}
-                                    &nbsp;
-                                    {this.state.sendRequestInFlight ? (
-                                        <Loader />
-                                    ) : (
-                                        <Button color="success" onClick={this.send}>
-                                            Send
-                                        </Button>
-                                    )}
-                                </p>
-                                <Alert
-                                    color={this.state.sendError ? "danger" : "success"}
-                                    isOpen={this.state.sendStatus}
-                                    toggle={() =>
-                                        this.setState({ sendStatus: null, sendAmount: "", sendRecipient: "" })
-                                    }
-                                >
-                                    {this.state.sendStatus}
-                                </Alert>
-                                <hr />
-                                <h4>Unconfirmed Transactions</h4>
-                                <pre>{JSON.stringify(this.state.transactions.unconfirmed_transactions, null, 2)}</pre>
-                                {this.state.transactionRequestInFlight ? (
-                                    <Loader />
-                                ) : (
-                                    <Button color="success" onClick={this.fetchTransactions}>
-                                        Update the transaction list
-                                    </Button>
-                                )}
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-                <div className="footer px-0 pt-3 pb-1 bg-dark text-white">
-                    <Container fluid>
-                        <Row>
-                            <Col sm="1" className="d-flex align-items-center">
-                                <h6 className="heading">Check</h6>
-                            </Col>
-                            <Col sm="11" className="d-flex align-items-center">
-                                <Container fluid>
-                                    <Row>
-                                        <Col sm="12">
-                                            SHA256 hash of (&nbsp;
-                                            <input
-                                                type="text"
-                                                id="verifyPreviousProof"
-                                                className="mono-font"
-                                                value={this.state.verifyPreviousProof}
-                                                placeholder={"previous_proof"}
-                                                onInput={this.handleVerifyChange}
-                                                size={15}
-                                            />
-                                            &nbsp;+&nbsp;
-                                            <input
-                                                type="text"
-                                                id="verifyProof"
-                                                className="mono-font"
-                                                value={this.state.verifyProof}
-                                                placeholder={"proof"}
-                                                onInput={this.handleVerifyChange}
-                                                size={15}
-                                            />
-                                            &nbsp;+&nbsp;
-                                            <input
-                                                type="text"
-                                                id="verifyPreviousHash"
-                                                className="mono-font"
-                                                value={this.state.verifyPreviousHash}
-                                                placeholder={"previous_hash"}
-                                                onInput={this.handleVerifyChange}
-                                                size={70}
-                                            />
-                                            &nbsp;)
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col sm="12" className="py-3">
-                                            =&nbsp;
-                                            <input
-                                                type="text"
-                                                className="mono-font"
-                                                disabled
-                                                value={this.state.verifyProofHash}
-                                                size={70}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </Container>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
+                <UsernameModal
+                    showModal={this.state.user === null}
+                    showAlert={this.state.usernameError}
+                    showLoader={this.state.userRequestInFlight}
+                    alertMessage={this.state.usernameErrorMessage}
+                    closeAlert={() => this.setState({ usernameError: false, usernameErrorMessage: "" })}
+                    saveUser={this.setUser}
+                />
+                <StatusBarHeader balance={this.state.balance} user={this.state.user} />
+                <Container fluid className="main-content flex-grow-1 flex-shrink-0">
+                    <Row>
+                        <ChainPanel
+                            chain={this.state.chain.chain}
+                            loading={this.state.chainRequestInFlight}
+                            reload={this.fetchChain}
+                        />
+                        <CommandPanel
+                            mine={{
+                                currentlyMining: this.state.mineRequestInFlight,
+                                startMining: this.mine,
+                                mineStatus: this.state.mineStatus,
+                                dismissMineMessage: () => this.setState({ mineStatus: null }),
+                            }}
+                            send={{
+                                currentlySending: this.state.sendRequestInFlight,
+                                startSending: this.send,
+                                sendAmount: this.state.sendAmount,
+                                handleAmountChange: this.handleAmountChange,
+                                sendRecipient: this.state.sendRecipient,
+                                handleRecipientChange: this.handleRecipientChange,
+                                sendError: this.state.sendError,
+                                sendStatus: this.state.sendStatus,
+                                dismissSendMessage: () =>
+                                    this.setState({ sendStatus: null, sendAmount: "", sendRecipient: "" }),
+                            }}
+                            transactions={{
+                                transactions: this.state.transactions.unconfirmed_transactions,
+                                currentlyGettingTransactions: this.state.transactionRequestInFlight,
+                                getTransactions: this.fetchTransactions,
+                            }}
+                        />
+                    </Row>
+                </Container>
+                <VerificationFooter />
             </div>
         );
     }
