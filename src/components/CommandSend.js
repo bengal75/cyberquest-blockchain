@@ -36,6 +36,7 @@ const CommandSend = (props) => {
                 )}
             </div>
             <Alert
+                className="mt-2 mb-0"
                 color={props.sendError ? "danger" : "success"}
                 isOpen={Boolean(props.sendStatus)}
                 toggle={props.dismissSendMessage}
