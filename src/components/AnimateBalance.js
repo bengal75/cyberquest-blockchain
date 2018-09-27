@@ -10,11 +10,13 @@ class AnimateBalance extends React.Component {
     }
 
     animatingStyle = {
+        marginLeft: "10px",
         fontSize: "2rem",
         color: "#ffd700",
     };
     staticStyle = {
-        fontSize: "1rem",
+        marginLeft: "10px",
+        fontSize: "1.5rem",
         color: "#ffffff",
     };
 

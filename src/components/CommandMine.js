@@ -5,7 +5,7 @@ import Loader from "./Loader";
 const CommandMine = (props) => {
     return (
         <div>
-            <h4>Mine a Block</h4>
+            <h5>Mine a Block</h5>
             {props.currentlyMining ? (
                 <Container>
                     <Row>
@@ -26,7 +26,7 @@ const CommandMine = (props) => {
             )}
             {props.mineStatus ? (
                 <Alert className="mt-2 mb-0 p-0" color="success" toggle={props.dismissMineMessage}>
-                    <h4 className="alert-heading pt-2 pl-2">{props.mineStatus.message}</h4>
+                    <h5 className="pt-2 pl-2">{props.mineStatus.message}</h5>
                     <pre className="m-0">
                         {JSON.stringify(
                             {

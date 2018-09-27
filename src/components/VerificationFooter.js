@@ -30,15 +30,15 @@ class VerificationFooter extends React.Component {
 
     render() {
         return (
-            <div className="footer px-0 pt-3 pb-1 bg-dark text-white">
+            <div className="footer p-0 bg-dark text-white">
                 <Container fluid>
                     <Row>
-                        <Col sm="1" className="d-flex align-items-center">
-                            <h6 className="heading">Check</h6>
+                        <Col sm="1" className="d-flex align-items-center justify-content-center footer">
+                            <h4 className="mx-3 my-0">Check</h4>
                         </Col>
-                        <Col sm="11" className="d-flex align-items-center">
+                        <Col sm="11" className="d-flex align-items-center footer">
                             <Container fluid>
-                                <Row>
+                                <Row className="d-flex align-items-center half-footer">
                                     <Col sm="12">
                                         SHA256 hash of (&nbsp;
                                         <input
@@ -73,8 +73,8 @@ class VerificationFooter extends React.Component {
                                         &nbsp;)
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col sm="12" className="py-3">
+                                <Row className="d-flex align-items-center half-footer">
+                                    <Col sm="12">
                                         =&nbsp;
                                         <input
                                             type="text"

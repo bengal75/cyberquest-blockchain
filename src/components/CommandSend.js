@@ -5,7 +5,7 @@ import Loader from "./Loader";
 const CommandSend = (props) => {
     return (
         <div>
-            <h4>Send Some Coins</h4>
+            <h5>Send Some Coins</h5>
             <div>
                 Send{" "}
                 <input

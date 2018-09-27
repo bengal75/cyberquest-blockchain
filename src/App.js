@@ -5,6 +5,7 @@ import StatusBarHeader from "./components/StatusBarHeader";
 import ChainPanel from "./components/ChainPanel";
 import CommandPanel from "./components/CommandPanel";
 import VerificationFooter from "./components/VerificationFooter";
+import backgroundClass from "./util/cyberquest-background";
 import "./inc/App.css";
 
 import { api, mineDelay, usernameRegexp } from "./config";
@@ -80,6 +81,8 @@ class App extends Component {
                         userRequestInFlight: false,
                     });
                     this.fetchChain();
+                    // Implement refactored background animation
+                    backgroundClass();
                     return true;
                 } else {
                     this.setState({
@@ -176,6 +179,7 @@ class App extends Component {
     render() {
         return (
             <div className="App-root d-flex flex-column justify-content-between">
+                <div className="cyberquest-background" />
                 <UsernameModal
                     showModal={this.state.user === null}
                     showAlert={this.state.usernameError}

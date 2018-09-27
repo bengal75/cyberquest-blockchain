@@ -8,11 +8,11 @@ const ChainPanel = (props) => {
             <Container fluid>
                 <Row>
                     <Col sm="12" className="px-1 column-chrome">
-                        <h3 className="heading">Chain</h3>
+                        <h3>Chain</h3>
                     </Col>
                 </Row>
                 <Row>
-                    <Col id="chain-pre" sm="12" className="panel-height column-overflow border px-0">
+                    <Col id="chain-pre" sm="12" className="panel-height column-overflow px-0 well well-success">
                         <pre className="my-0">{JSON.stringify(props.chain, null, 2)}</pre>
                     </Col>
                 </Row>

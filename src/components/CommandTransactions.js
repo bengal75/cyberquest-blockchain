@@ -5,8 +5,8 @@ import Loader from "./Loader";
 const CommandTransactions = (props) => {
     return (
         <div>
-            <h4>Unconfirmed Transactions</h4>
-            <pre>{JSON.stringify(props.transactions, null, 2)}</pre>
+            <h5>Unconfirmed Transactions</h5>
+            <pre className="well">{JSON.stringify(props.transactions, null, 2)}</pre>
             {props.currentlyGettingTransactions ? (
                 <Loader />
             ) : (

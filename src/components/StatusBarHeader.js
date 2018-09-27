@@ -6,15 +6,15 @@ import logo from "../inc/cyber-quest-white.png";
 const StatusBarHeader = (props) => {
     return (
         <Navbar className="header" color="dark" expand="md">
-            <NavbarBrand className="heading text-white" href="/">
+            <NavbarBrand className="pr-3 text-white d-flex align-items-center" href="#">
                 <img src={logo} className="App-logo" alt="logo" />
-                &nbsp;CyberCoin
+                <span className="heading">&nbsp;CyberCoin</span>
             </NavbarBrand>
             <Nav className="ml-auto pr-3 text-white d-flex align-items-center" navbar>
-                <span className="heading">Coins:</span> <AnimateBalance value={props.balance} />
+                <span className="heading">Coins:</span> <AnimateBalance className="coins-value" value={props.balance} />
             </Nav>
             <Nav className="ml-auto pr-3 text-white" navbar>
-                <span className="heading">User:</span> {props.user}
+                <span className="heading">User:</span> <span className="user-value">{props.user}</span>
             </Nav>
         </Navbar>
     );
