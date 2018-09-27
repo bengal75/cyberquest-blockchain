@@ -40,7 +40,7 @@ class VerificationFooter extends React.Component {
                             <Container fluid>
                                 <Row className="d-flex align-items-center half-footer">
                                     <Col sm="12">
-                                        SHA256 hash of (&nbsp;
+                                        SHA256 hash of (
                                         <input
                                             type="text"
                                             id="verifyPreviousProof"
@@ -48,9 +48,9 @@ class VerificationFooter extends React.Component {
                                             value={this.state.verifyPreviousProof}
                                             placeholder={"previous_proof"}
                                             onInput={this.handleVerifyChange}
-                                            size={15}
+                                            size={10}
                                         />
-                                        &nbsp;+&nbsp;
+                                        +
                                         <input
                                             type="text"
                                             id="verifyProof"
@@ -58,9 +58,9 @@ class VerificationFooter extends React.Component {
                                             value={this.state.verifyProof}
                                             placeholder={"proof"}
                                             onInput={this.handleVerifyChange}
-                                            size={15}
+                                            size={10}
                                         />
-                                        &nbsp;+&nbsp;
+                                        +
                                         <input
                                             type="text"
                                             id="verifyPreviousHash"
@@ -68,9 +68,9 @@ class VerificationFooter extends React.Component {
                                             value={this.state.verifyPreviousHash}
                                             placeholder={"previous_hash"}
                                             onInput={this.handleVerifyChange}
-                                            size={70}
+                                            size={66}
                                         />
-                                        &nbsp;)
+                                        )
                                     </Col>
                                 </Row>
                                 <Row className="d-flex align-items-center half-footer">
@@ -81,7 +81,7 @@ class VerificationFooter extends React.Component {
                                             className="mono-font"
                                             disabled
                                             value={this.state.verifyProofHash}
-                                            size={70}
+                                            size={66}
                                         />
                                     </Col>
                                 </Row>
