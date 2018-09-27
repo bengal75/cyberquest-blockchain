@@ -48,7 +48,7 @@ class VerificationFooter extends React.Component {
                                             value={this.state.verifyPreviousProof}
                                             placeholder={"previous_proof"}
                                             onInput={this.handleVerifyChange}
-                                            size={10}
+                                            size={14}
                                         />
                                         +
                                         <input
@@ -58,7 +58,7 @@ class VerificationFooter extends React.Component {
                                             value={this.state.verifyProof}
                                             placeholder={"proof"}
                                             onInput={this.handleVerifyChange}
-                                            size={10}
+                                            size={14}
                                         />
                                         +
                                         <input
