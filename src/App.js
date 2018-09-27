@@ -8,7 +8,7 @@ import VerificationFooter from "./components/VerificationFooter";
 import backgroundClass from "./util/cyberquest-background";
 import "./inc/App.css";
 
-import { api, mineDelay, usernameRegexp } from "./config";
+const { api, mineDelay, usernameRegexp } = window;
 
 class App extends Component {
     constructor(props) {
